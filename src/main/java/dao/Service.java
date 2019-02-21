@@ -139,7 +139,72 @@ public Utilisateur getUtilistateur(String nom) throws MonException
 	}
 }
 
-	
+/*
+	Gestion des oeuvres
+ */
+
+	public List<Oeuvrevente> consulterListeOeuvres() throws MonException {
+		String mysql = "select * from oeuvrevente order by titre_oeuvrevente";
+		return consulterListeOeuvres(mysql);
+	}
+
+	private List<Oeuvrevente> consulterListeOeuvres(String mysql) throws MonException {
+		List<Object> rs;
+		List<Oeuvrevente> mesOeuvres = new ArrayList<Oeuvrevente>();
+		int index = 0;
+		try {
+			DialogueBd unDialogueBd = DialogueBd.getInstance();
+			rs =unDialogueBd.lecture(mysql);
+			while (index < rs.size()) {
+				// On crée un stage
+				Oeuvrevente oeuvre = new Oeuvrevente();
+				// il faut redecouper la liste pour retrouver les lignes
+				oeuvre.setIdOeuvrevente(Integer.parseInt(rs.get(index + 0).toString()));
+				oeuvre.setTitreOeuvrevente(rs.get(index + 1).toString());
+				oeuvre.setEtatOeuvrevente(rs.get(index + 2).toString());
+				oeuvre.setPrixOeuvrevente((Float) rs.get(index + 3));
+				oeuvre.setProprietaire(getProprietaire((Long) rs.get(index + 4)));
+				// On incrémente tous les 3 champs
+				index = index + 5;
+				mesOeuvres.add(oeuvre);
+			}
+
+			return mesOeuvres;
+		} catch (MonException e) {
+			throw e;
+		}
+		catch (Exception exc) {
+			throw new MonException(exc.getMessage(), "systeme");
+		}
+	}
+
+	public Proprietaire getProprietaire(Long idProp) throws MonException
+	{
+		List<Object> rs;
+		Proprietaire prop = null;
+		String mysql = "SELECT id_proprietaire,nom_proprietaire, prenom_proprietaire FROM proprietaire  " +
+				" where id_proprietaire = " + "'" + idProp +"'";
+		int index = 0;
+		try {
+			DialogueBd unDialogueBd = DialogueBd.getInstance();
+			rs =unDialogueBd.lecture(mysql);
+			while (index < rs.size()) {
+				prop = new Proprietaire();
+				// il faut redecouper la liste pour retrouver les lignes
+				prop.setIdProprietaire(Integer.parseInt(rs.get(index + 0).toString()));
+				prop.setNomProprietaire(rs.get(index + 1).toString());
+				prop.setPrenomProprietaire(rs.get(index + 2).toString());
+				// On incrémente tous les 3 champs
+				index = index + 3;
+			}
+			return prop;
+		} catch (MonException e) {
+			throw e;
+		}
+		catch (Exception exc) {
+			throw new MonException(exc.getMessage(), "systeme");
+		}
+	}
 	
 
 }

@@ -26,6 +26,7 @@ public class Controleur extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String ACTION_TYPE = "action";
     private static final String LISTER_ADHERENT = "listerAdherent";
+    private static final String LISTER_OEUVRE = "listerOeuvre";
     private static final String AJOUTER_ADHERENT = "ajouterAdherent";
     private static final String INSERER_ADHERENT = "insererAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
@@ -122,6 +123,17 @@ public class Controleur extends HttpServlet {
                 Service unService = new Service();
                 request.setAttribute("mesAdherents", unService.consulterListeAdherents());
                 destinationPage = "/vues/listerAdherent.jsp";
+            } catch (MonException e) {
+                // TODO Auto-generated catch block
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
+        } else if (LISTER_OEUVRE.equals(actionName)) {
+            try {
+
+                Service unService = new Service();
+                request.setAttribute("mesOeuvres", unService.consulterListeOeuvres());
+                destinationPage = "/vues/listerOeuvre.jsp";
             } catch (MonException e) {
                 // TODO Auto-generated catch block
                 request.setAttribute("MesErreurs", e.getMessage());
