@@ -16,26 +16,25 @@
 			<h3>Liste des Oeuvres</h3>
 			<table class="table table-hover">
 				<tr>
-					<th class="col-md-1">Numero</th>
 					<th class="col-md-2">Nom</th>
 					<th class="col-md-2">Etat</th>
 					<th class="col-md-4">Prix</th>
 					<th class="col-md-4">Propriétaire</th>
+					<th class="col-md-4">Reserver / Modifier</th>
 
 
 				</tr>
 
 				<c:forEach items="${mesOeuvres}" var="item">
 					<tr>
-						<td>${item.idOeuvrevente}</td>
 						<td>${item.titreOeuvrevente}</td>
 						<td>${item.etatOeuvrevente}</td>
 						<td>${item.prixOeuvrevente}</td>
 						<td>${item.proprietaire.getNomProprietaire()}</td>
 						<td><a class="btn btn-info" href="ServletControleur?action=reserveOeuvre&id=${item.idOeuvrevente}" role="button"><span
-								class="glyphicon glyphicon-pencil"></span> Modifier</a>
-							<a class="btn btn-danger" href="modifierOeuvre.htm?id=${item.idOeuvrevente}" role="button"><span
-									class="glyphicon glyphicon-remove-circle"></span> Supprimer</a></td>
+								class="glyphicon glyphicon-pencil"></span> Reserver</a>
+							<a class="btn btn-danger" href="ServletControleur?action=modifierOeuvre&id=${item.idOeuvrevente}" role="button"><span
+									class="glyphicon glyphicon-remove-circle"></span> Modifier</a></td>
 					</tr>
 				</c:forEach>
 			</table>

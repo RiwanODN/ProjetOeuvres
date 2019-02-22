@@ -156,6 +156,7 @@ public Utilisateur getUtilistateur(String nom) throws MonException
 			DialogueBd unDialogueBd = DialogueBd.getInstance();
 			rs =unDialogueBd.lecture(mysql);
 			while (index < rs.size()) {
+				System.out.println(rs.get(index + 1).toString());
 				// On crée un stage
 				Oeuvrevente oeuvre = new Oeuvrevente();
 				// il faut redecouper la liste pour retrouver les lignes
@@ -205,6 +206,55 @@ public Utilisateur getUtilistateur(String nom) throws MonException
 			throw new MonException(exc.getMessage(), "systeme");
 		}
 	}
-	
 
+	public Oeuvrevente consulterOeuvre(int numero) throws MonException {
+
+		Map mParams = new HashMap();
+		Map mParam;
+		try
+		{
+			System.out.println(numero);
+			String mysql = "select * from oeuvrevente where id_oeuvrevente="+numero+"";
+			mParam = new HashMap();
+			mParam.put(1, numero);
+			mParams.put(0, mParam);
+			List<Oeuvrevente> mesOeuvres = consulterListeOeuvres(mysql);
+			if (mesOeuvres.isEmpty())
+				return null;
+			else {
+				return mesOeuvres.get(0);
+			}
+		} catch (MonException e)
+		{
+			throw e;
+		}
+	}
+
+	public List<Proprietaire> consulterListeProprietaires() throws MonException {
+		String mysql = "select * from proprietaire order by nom_proprietaire";
+		List<Object> rs;
+		List<Proprietaire> mesProprietaires = new ArrayList<Proprietaire>();
+		int index = 0;
+		try {
+			DialogueBd unDialogueBd = DialogueBd.getInstance();
+			rs =unDialogueBd.lecture(mysql);
+			while (index < rs.size()) {
+				// On crée un stage
+				Proprietaire prop = new Proprietaire();
+				// il faut redecouper la liste pour retrouver les lignes
+				prop.setIdProprietaire(Integer.parseInt(rs.get(index + 0).toString()));
+				prop.setNomProprietaire(rs.get(index + 1).toString());
+				prop.setPrenomProprietaire(rs.get(index + 2).toString());
+				index = index + 3;
+				mesProprietaires.add(prop);
+			}
+
+			return mesProprietaires;
+		} catch (MonException e) {
+			throw e;
+		}
+		catch (Exception exc) {
+			throw new MonException(exc.getMessage(), "systeme");
+		}
+	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +31,7 @@ public class Controleur extends HttpServlet {
     private static final String AJOUTER_ADHERENT = "ajouterAdherent";
     private static final String INSERER_ADHERENT = "insererAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
+    private static final String MODIFIER_OEUVRE = "modifierOeuvre";
     private static final String LOGIN= "login";
     private static final String CONTROLELOGIN= "controleLogin";
     private static final String ERROR_KEY = "mesErreurs";
@@ -169,7 +171,25 @@ public class Controleur extends HttpServlet {
             //request.setAttribute()
             destinationPage = "/vues/modifierAdherent.jsp";
 
-        } else if (MODIFIER_ADHERENT.equals(actionName)) {
+        }
+
+        else if (MODIFIER_OEUVRE.equals(actionName)) {
+            try {
+                String idOeuvre = request.getParameter("id");
+                Service unService = new Service();
+                Oeuvrevente oeuvre = unService.consulterOeuvre(Integer.parseInt(idOeuvre));
+                List<Proprietaire> props = unService.consulterListeProprietaires();
+                request.setAttribute("oeuvre", oeuvre);
+                request.setAttribute("props", props);
+                destinationPage = "/vues/modifierOeuvre.jsp";
+            }  catch (MonException e) {
+            // TODO Auto-generated catch block
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "/vues/Erreur.jsp";
+        }
+
+
+    } else if (MODIFIER_ADHERENT.equals(actionName)) {
            /*try {
                 Adherent unAdherent = new Adherent();
                 unAdherent.setNomAdherent(request.getParameter("txtnom"));
