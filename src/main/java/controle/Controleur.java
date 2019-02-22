@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,8 +27,10 @@ public class Controleur extends HttpServlet {
     private static final String ACTION_TYPE = "action";
 
     private static final String LISTER_ADHERENT = "listerAdherent";
+    private static final String LISTER_OEUVRE = "listerOeuvre";
     private static final String AJOUTER_ADHERENT = "ajouterAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
+    private static final String MODIFIER_OEUVRE = "modifierOeuvre";
     private static final String MAJ_ADHERENT = "majAdherent";
 
     private static final String SUPPRIMER_ADHERENT = "supprimerAdherent";
@@ -130,6 +133,17 @@ public class Controleur extends HttpServlet {
                 request.setAttribute("MesErreurs", e.getMessage());
                 destinationPage = "/vues/Erreur.jsp";
             }
+        } else if (LISTER_OEUVRE.equals(actionName)) {
+            try {
+
+                Service unService = new Service();
+                request.setAttribute("mesOeuvres", unService.consulterListeOeuvres());
+                destinationPage = "/vues/listerOeuvre.jsp";
+            } catch (MonException e) {
+                // TODO Auto-generated catch block
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
         }
 
         else
@@ -205,6 +219,27 @@ public class Controleur extends HttpServlet {
                 //recup ID
                 int numero = Integer.parseInt(request.getParameter("id"));
 
+        }
+
+        else if (MODIFIER_OEUVRE.equals(actionName)) {
+            try {
+                String idOeuvre = request.getParameter("id");
+                Service unService = new Service();
+                Oeuvrevente oeuvre = unService.consulterOeuvre(Integer.parseInt(idOeuvre));
+                List<Proprietaire> props = unService.consulterListeProprietaires();
+                request.setAttribute("oeuvre", oeuvre);
+                request.setAttribute("props", props);
+                destinationPage = "/vues/modifierOeuvre.jsp";
+            }  catch (MonException e) {
+            // TODO Auto-generated catch block
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "/vues/Erreur.jsp";
+        }
+
+
+    } else if (MODIFIER_ADHERENT.equals(actionName)) {
+           /*try {
+                Adherent unAdherent = new Adherent();
                 //Modification de l'adherent
                 Adherent unAdherent = unService.consulterAdherent(numero);
                 unAdherent.setNomAdherent(request.getParameter("txtnom"));
