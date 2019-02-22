@@ -29,17 +29,36 @@ public class Service {
 			throw new MonException(exc.getMessage(), "systeme");
 		}
 	}
+
+    public void supprimerAdherent(int numero) throws MonException {
+        String mysql;
+
+        DialogueBd unDialogueBd = DialogueBd.getInstance();
+        try {
+            mysql = "delete from adherent where id_adherent=" + numero;
+            unDialogueBd.insertionBD(mysql);
+
+        } catch (MonException e) {
+            throw e;
+        }
+        catch (Exception exc) {
+            throw new MonException(exc.getMessage(), "systeme");
+        }
+    }
 	public void majAdherent(Adherent unAdherent) throws MonException {
 		String mysql;
 
 		DialogueBd unDialogueBd = DialogueBd.getInstance();
 		try {
-			mysql = "insert into adherent  (nom_adherent,prenom_adherent,ville_adherent)  " + "values ('"
-					+ unAdherent.getNomAdherent();
-			mysql += "'" + ",'" + unAdherent.getPrenomAdherent() + "','" + unAdherent.getVilleAdherent() + "')";
-
+			mysql = "UPDATE adherent" +
+					"SET nom_adherent = '" + unAdherent.getNomAdherent()+
+					"'  ,prenom_adherent = '" + unAdherent.getPrenomAdherent()+
+					"'  ,ville_adherent= '" + unAdherent.getVilleAdherent()+
+					"' WHERE id_adherent =   " + unAdherent.getIdAdherent();
+            System.out.println(mysql);
 			unDialogueBd.insertionBD(mysql);
 		} catch (MonException e) {
+            System.out.println("ERROE");
 			throw e;
 		}
 		catch (Exception exc) {
@@ -57,10 +76,8 @@ public class Service {
 	     Map mParam;
 	  try
 	  {
-		String mysql = "select * from adherent where numero_adherent=?";
-		 mParam = new HashMap();
-	     mParam.put(1, numero);
-	     mParams.put(0, mParam);
+		String mysql = "select * from adherent where id_adherent="+ numero;
+
 		List<Adherent> mesAdh = consulterListeAdherents(mysql);
 		if (mesAdh.isEmpty())
 			return null;

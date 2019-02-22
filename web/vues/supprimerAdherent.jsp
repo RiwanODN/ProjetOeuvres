@@ -5,9 +5,9 @@
 <body>
 <%@include file="navigation.jsp"%>
 <H1> Modifier un adhérent </H1>
-<form method="post" action="ServletControleur?action=majAdherent">
+<form method="post" action="ServletControleur?action=validationSupprAdherent">
 <div class="col-md-12 well well-md">
-    <h1>Modifier Séjour</h1>
+    <h1>Êtes-vous sur de vouloir supprimer cet adhérent ?</h1>
     <div class="row" >
         <div class="col-md-12" style ="border:none; background-color:transparent; height :20px;">
         </div>
@@ -51,7 +51,7 @@
 
         <button type="button" class="btn btn-default btn-primary"
                 onclick="{
-                            window.location = '../index.jsp';
+                            window.location = '../listerAdherent.jsp';
                         }">
             <span class="glyphicon glyphicon-remove"></span> Annuler
 

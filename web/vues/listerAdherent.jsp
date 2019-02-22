@@ -31,7 +31,7 @@
 						<td>${item.villeAdherent}</td>
 						<td><a class="btn btn-info" href="ServletControleur?action=modifierAdherent&id=${item.idAdherent}" role="button"><span
 								class="glyphicon glyphicon-pencil"></span> Modifier</a>
-							<a class="btn btn-danger" href="supprimerAdherent.htm?id=${item.idAdherent}" role="button"><span
+							<a class="btn btn-danger" href="ServletControleur?action=supprimerAdherent&id=${item.idAdherent}" role="button"><span
 									class="glyphicon glyphicon-remove-circle"></span> Supprimer</a></td>
 					</tr>
 				</c:forEach>

@@ -17,7 +17,6 @@ import metier.*;
 import dao.Service;
 import meserreurs.*;
 import utilitaires.FonctionsUtiles;
-
 /**
  * Servlet implementation class Controleur
  */
@@ -25,10 +24,22 @@ import utilitaires.FonctionsUtiles;
 public class Controleur extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String ACTION_TYPE = "action";
+
     private static final String LISTER_ADHERENT = "listerAdherent";
     private static final String AJOUTER_ADHERENT = "ajouterAdherent";
-    private static final String INSERER_ADHERENT = "insererAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
+    private static final String MAJ_ADHERENT = "majAdherent";
+
+    private static final String SUPPRIMER_ADHERENT = "supprimerAdherent";
+    private static final String VALIDER_SUP_ADHERENT= "validationSupprAdherent";
+
+    private static final String VALIDER_ADHERENT = "validerAdherent";
+    private static final String INSERER_ADHERENT = "insererAdherent";
+
+    private static final String LISTER_OEUVRE = "listerOeuvre";
+    private static final String MODIFIER_OEUVRE = "modifierOeuvre";
+    private static final String VALIDER_OEUVRE = "validerOeuvre";
+
     private static final String LOGIN= "login";
     private static final String CONTROLELOGIN= "controleLogin";
     private static final String ERROR_KEY = "mesErreurs";
@@ -49,11 +60,7 @@ public class Controleur extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        try {
-            processusTraiteRequete(request, response);
-        } catch (MonException e) {
-            e.printStackTrace();
-        }
+        processusTraiteRequete(request, response);
     }
 
     /**
@@ -63,15 +70,11 @@ public class Controleur extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-        try {
-            processusTraiteRequete(request, response);
-        } catch (MonException e) {
-            e.printStackTrace();
-        }
+        processusTraiteRequete(request, response);
     }
 
     protected void processusTraiteRequete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, MonException {
+            throws ServletException, IOException {
         String actionName = request.getParameter(ACTION_TYPE);
         String destinationPage = ERROR_PAGE;
 
@@ -79,42 +82,42 @@ public class Controleur extends HttpServlet {
             destinationPage = "/vues/formLogin.jsp";
         }
         else
-            if ( CONTROLELOGIN.equals(actionName))
-            {
-                String login = request.getParameter("login");
-                String pwd = request.getParameter("pwd");
-                String message ="";
-                try {
+        if ( CONTROLELOGIN.equals(actionName))
+        {
+            String login = request.getParameter("login");
+            String pwd = request.getParameter("pwd");
+            String message ="";
+            try {
 
-                    Service unService = new Service();
-                    Utilisateur unUtilisateur = unService.getUtilistateur(login);
-                    if (unUtilisateur != null) {
-                        try {
-                            String pwdmd5 = FonctionsUtiles.md5(pwd);
-                            if (unUtilisateur.getMotPasse().equals(pwdmd5)) {
-                                HttpSession session = request.getSession();
-                                session.setAttribute("id", unUtilisateur.getNumUtil());
-                                destinationPage = "/index.jsp";
-                            } else {
-                                message = "mot de passe erroné";
-                                request.setAttribute("message", message);
-                                destinationPage = "/vues/formLogin.jsp";
-                            }
-                        } catch (NoSuchAlgorithmException e) {
-                            request.setAttribute("MesErreurs", e.getMessage());
-                            destinationPage = "/vues/Erreur.jsp";
+                Service unService = new Service();
+                Utilisateur unUtilisateur = unService.getUtilistateur(login);
+                if (unUtilisateur != null) {
+                    try {
+                        String pwdmd5 = FonctionsUtiles.md5(pwd);
+                        if (unUtilisateur.getMotPasse().equals(pwdmd5)) {
+                            HttpSession session = request.getSession();
+                            session.setAttribute("id", unUtilisateur.getNumUtil());
+                            destinationPage = "/index.jsp";
+                        } else {
+                            message = "mot de passe erroné";
+                            request.setAttribute("message", message);
+                            destinationPage = "/vues/formLogin.jsp";
                         }
-                    } else {
-                        message = "login erroné";
-                        request.setAttribute("message", message);
-                        destinationPage = "/vues/formLogin.jsp";
+                    } catch (NoSuchAlgorithmException e) {
+                        request.setAttribute("MesErreurs", e.getMessage());
+                        destinationPage = "/vues/Erreur.jsp";
                     }
-                } catch (MonException e) {
-                    request.setAttribute("MesErreurs", e.getMessage());
-                    destinationPage = "/vues/Erreur.jsp";
+                } else {
+                    message = "login erroné";
+                    request.setAttribute("message", message);
+                    destinationPage = "/vues/formLogin.jsp";
                 }
+            } catch (MonException e) {
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
             }
-         else
+        }
+        else
         // execute l'action
         if (LISTER_ADHERENT.equals(actionName)) {
             try {
@@ -148,31 +151,88 @@ public class Controleur extends HttpServlet {
             }
 
         }
+        else
+        if (SUPPRIMER_ADHERENT.equals(actionName)) {
+            try{
+            /*Service unService = new Service();
+            int num = Integer.parseInt(request.getParameter("id"));
 
+            request.setAttribute("item", unService.consulterAdherent(num));
+            //request.setAttribute()
+            destinationPage = "/vues/supprimerAdherent.jsp";*/
+
+                Service unService = new Service();
+                int numero = Integer.parseInt(request.getParameter("id"));
+                unService.supprimerAdherent(numero);
+                destinationPage = "/index.jsp";
+
+
+            } catch(MonException e){
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
+        }
+        /*else if(VALIDER_SUP_ADHERENT.equals(actionName)){
+            try{
+                Service unService = new Service();
+                //recup ID
+                int numero = Integer.parseInt(request.getParameter("id"));
+                //suppr
+                unService.deleteAdherent(numero);
+                //retour à l'accueil
+                destinationPage = "/listerAdherent.jsp";
+            } catch(MonException e){
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
+        }*/
         else
         if (MODIFIER_ADHERENT.equals(actionName)) {
-            Adherent unAdherent = new Adherent();
+            try {
             Service unService = new Service();
-            unService.consulterAdherent(unAdherent.getIdAdherent());
+            int num = Integer.parseInt(request.getParameter("id"));
+
+            request.setAttribute("item", unService.consulterAdherent(num));
             //request.setAttribute()
             destinationPage = "/vues/modifierAdherent.jsp";
+            }catch (MonException e) {
+                    request.setAttribute("MesErreurs", e.getMessage());
+                    destinationPage = "/vues/Erreur.jsp";
+            }
+        } else if(MAJ_ADHERENT.equals(actionName)){
+            try{
+               /* Service unService = new Service();
+                //recup ID
+                int numero = Integer.parseInt(request.getParameter("id"));
 
-        } else if (MODIFIER_ADHERENT.equals(actionName)) {
-           /*try {
-                Adherent unAdherent = new Adherent();
+                //Modification de l'adherent
+                Adherent unAdherent = unService.consulterAdherent(numero);
                 unAdherent.setNomAdherent(request.getParameter("txtnom"));
                 unAdherent.setPrenomAdherent(request.getParameter("txtprenom"));
                 unAdherent.setVilleAdherent(request.getParameter("txtville"));
+
+                unService.majAdherent(unAdherent);
+                destinationPage = "/listerAdherent.jsp";*/
+
                 Service unService = new Service();
-                unService.insertAdherent(unAdherent);
+
+                int numero = Integer.parseInt(request.getParameter("id"));
+
+                Adherent unAdherent = unService.consulterAdherent(numero);
+                unAdherent.setNomAdherent(request.getParameter("txtnom"));
+                unAdherent.setPrenomAdherent(request.getParameter("txtprenom"));
+                unAdherent.setVilleAdherent(request.getParameter("txtville"));
+
+                unService.majAdherent(unAdherent);
                 destinationPage = "/index.jsp";
-            } catch (MonException e) {
+            } catch(MonException e){
                 request.setAttribute("MesErreurs", e.getMessage());
                 destinationPage = "/vues/Erreur.jsp";
-            }*/
-
+            }
         }
 
+
+        //}
         else {
             String messageErreur = "[" + actionName + "] n'est pas une action valide.";
             request.setAttribute(ERROR_KEY, messageErreur);
