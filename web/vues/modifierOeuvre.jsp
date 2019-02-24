@@ -5,7 +5,7 @@
 <body>
 <%@include file="navigation.jsp"%>
 <H1> Modifier une Oeuvre </H1>
-<form method="post" action="ServletControleur?action=modifierOeuvre">
+<form method="post" action="ServletControleur?action=ajoutModificationOeuvre">
 <div class="col-md-12 well well-md">
     <h1>Modifier Oeuvre</h1>
     <div class="row" >
@@ -15,6 +15,7 @@
     <div class="form-group">
         <label class="col-md-3 control-label">Titre : </label>
         <div class="col-md-3">
+            <INPUT type="hidden" name="id" value='<c:out value="${oeuvre.getIdOeuvrevente()}" />' class="form-control">
             <INPUT type="text" name="txtnom" value='<c:out value="${oeuvre.getTitreOeuvrevente()}" />' id="nom" class="form-control" min="0">
         </div>
 

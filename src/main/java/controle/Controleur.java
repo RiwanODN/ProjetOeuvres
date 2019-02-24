@@ -31,6 +31,7 @@ public class Controleur extends HttpServlet {
     private static final String AJOUTER_ADHERENT = "ajouterAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
     private static final String MODIFIER_OEUVRE = "modifierOeuvre";
+    private static final String AJOUT_MODIFICATION_OEUVRE = "ajoutModificationOeuvre";
     private static final String MAJ_ADHERENT = "majAdherent";
 
     private static final String SUPPRIMER_ADHERENT = "supprimerAdherent";
@@ -39,8 +40,6 @@ public class Controleur extends HttpServlet {
     private static final String VALIDER_ADHERENT = "validerAdherent";
     private static final String INSERER_ADHERENT = "insererAdherent";
 
-    private static final String LISTER_OEUVRE = "listerOeuvre";
-    private static final String MODIFIER_OEUVRE = "modifierOeuvre";
     private static final String VALIDER_OEUVRE = "validerOeuvre";
 
     private static final String LOGIN= "login";
@@ -213,11 +212,31 @@ public class Controleur extends HttpServlet {
                     request.setAttribute("MesErreurs", e.getMessage());
                     destinationPage = "/vues/Erreur.jsp";
             }
-        } else if(MAJ_ADHERENT.equals(actionName)){
+        } /*else if(MAJ_ADHERENT.equals(actionName)){
             try{
-               /* Service unService = new Service();
+                Service unService = new Service();
                 //recup ID
                 int numero = Integer.parseInt(request.getParameter("id"));
+
+
+        }*/
+        else
+        if (AJOUT_MODIFICATION_OEUVRE.equals(actionName)) {
+            try {
+                Service unService = new Service();
+                Oeuvrevente oeuvre = new Oeuvrevente();
+                oeuvre.setIdOeuvrevente(Integer.parseInt(request.getParameter("id")));
+                oeuvre.setTitreOeuvrevente(request.getParameter("txtnom"));
+                oeuvre.setPrixOeuvrevente(Float.parseFloat(request.getParameter("txtprix")));
+                Proprietaire prop = unService.getProprietaire(Long.valueOf(request.getParameter("txtprop")));
+                oeuvre.setProprietaire(prop);
+                System.out.println(prop);
+                unService.ajoutModifOeuvre(oeuvre);
+                destinationPage = "/index.jsp";
+            } catch (MonException e) {
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
 
         }
 
@@ -237,8 +256,8 @@ public class Controleur extends HttpServlet {
         }
 
 
-    } else if (MODIFIER_ADHERENT.equals(actionName)) {
-           /*try {
+    } /*else if (MODIFIER_ADHERENT.equals(actionName)) {
+           try {
                 Adherent unAdherent = new Adherent();
                 //Modification de l'adherent
                 Adherent unAdherent = unService.consulterAdherent(numero);
@@ -247,7 +266,7 @@ public class Controleur extends HttpServlet {
                 unAdherent.setVilleAdherent(request.getParameter("txtville"));
 
                 unService.majAdherent(unAdherent);
-                destinationPage = "/listerAdherent.jsp";*/
+                destinationPage = "/listerAdherent.jsp";
 
                 Service unService = new Service();
 
@@ -264,7 +283,7 @@ public class Controleur extends HttpServlet {
                 request.setAttribute("MesErreurs", e.getMessage());
                 destinationPage = "/vues/Erreur.jsp";
             }
-        }
+        }*/
 
 
         //}

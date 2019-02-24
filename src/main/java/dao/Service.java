@@ -274,4 +274,22 @@ public Utilisateur getUtilistateur(String nom) throws MonException
 			throw new MonException(exc.getMessage(), "systeme");
 		}
 	}
+
+	public void ajoutModifOeuvre(Oeuvrevente oeuvre) throws MonException {
+		String mysql;
+
+		DialogueBd unDialogueBd = DialogueBd.getInstance();
+		try {
+			mysql = "UPDATE `oeuvrevente` SET `titre_oeuvrevente` = '"+oeuvre.getTitreOeuvrevente()+"'," +
+					" `prix_oeuvrevente` = '"+oeuvre.getPrixOeuvrevente()+"'," +
+					" `id_proprietaire` = "+oeuvre.getProprietaire().getIdProprietaire()+" WHERE `oeuvrevente`.`id_oeuvrevente` = "+oeuvre.getIdOeuvrevente();
+			unDialogueBd.insertionBD(mysql);
+		} catch (MonException e) {
+			throw e;
+		}
+		catch (Exception exc) {
+			throw new MonException(exc.getMessage(), "systeme");
+		}
+	}
 }
+
