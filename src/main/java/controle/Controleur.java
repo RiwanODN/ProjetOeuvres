@@ -32,6 +32,7 @@ public class Controleur extends HttpServlet {
     private static final String INSERER_ADHERENT = "insererAdherent";
     private static final String MODIFIER_ADHERENT = "modifierAdherent";
     private static final String MODIFIER_OEUVRE = "modifierOeuvre";
+    private static final String AJOUT_MODIFICATION_OEUVRE = "ajoutModificationOeuvre";
     private static final String LOGIN= "login";
     private static final String CONTROLELOGIN= "controleLogin";
     private static final String ERROR_KEY = "mesErreurs";
@@ -170,6 +171,25 @@ public class Controleur extends HttpServlet {
             unService.consulterAdherent(unAdherent.getIdAdherent());
             //request.setAttribute()
             destinationPage = "/vues/modifierAdherent.jsp";
+
+        }
+        else
+        if (AJOUT_MODIFICATION_OEUVRE.equals(actionName)) {
+            try {
+                Service unService = new Service();
+                Oeuvrevente oeuvre = new Oeuvrevente();
+                oeuvre.setIdOeuvrevente(Integer.parseInt(request.getParameter("id")));
+                oeuvre.setTitreOeuvrevente(request.getParameter("txtnom"));
+                oeuvre.setPrixOeuvrevente(Float.parseFloat(request.getParameter("txtprix")));
+                Proprietaire prop = unService.getProprietaire(Long.valueOf(request.getParameter("txtprop")));
+                oeuvre.setProprietaire(prop);
+                System.out.println(prop);
+                unService.ajoutModifOeuvre(oeuvre);
+                destinationPage = "/index.jsp";
+            } catch (MonException e) {
+                request.setAttribute("MesErreurs", e.getMessage());
+                destinationPage = "/vues/Erreur.jsp";
+            }
 
         }
 
